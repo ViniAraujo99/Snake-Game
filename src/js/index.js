@@ -3,12 +3,13 @@ const scoreElement = document.querySelector(".score");
 const highScoreElement = document.querySelector(".highScore");
 const gameBoard = document.querySelector(".gameBoard");
 const controls = document.querySelectorAll(".btn");
+const btnStart = document.querySelector(".start");
 
 //Variables
 let setIntervalID;
 let foodX, foodY;
-let snakeX = 15,
-  snakeY = 15;
+let snakeX = 1,
+  snakeY = 1;
 let velX = 0,
   velY = 0;
 let score = 0;
@@ -25,6 +26,13 @@ const gameOverHandler = () => {
   location.reload();
 };
 
+//Win Handler
+const winHandler = () => {
+  clearInterval(setIntervalID);
+  alert("Você venceu! Clique no 'OK' pressione 'Enter' para reiniciar...");
+  location.reload();
+};
+
 //Update score and high score
 const updateScoreHighScore = () => {
   score++;
@@ -33,12 +41,24 @@ const updateScoreHighScore = () => {
   highScore = score > highScore ? (highScore = score) : (highScore = highScore);
   localStorage.setItem("highScore", highScore);
   highScoreElement.innerHTML = `High Score: ${highScore}`;
+
+  //Max points possible
+  if (score >= 899) {
+    winHandler();
+  }
 };
 
 //Update food position (* 30 = grid max lenght [x, y])
 const updateFoodPos = () => {
   foodX = Math.floor(Math.random() * 30) + 1;
   foodY = Math.floor(Math.random() * 30) + 1;
+
+  //Check if food is at the same place as one of the snake's part
+  for (let i = 0; i < snakeBody.length; i++) {
+    if (snakeBody[i][0] == foodX && snakeBody[i][1] == foodY) {
+      updateFoodPos();
+    }
+  }
 };
 
 //Set snake direction
@@ -81,6 +101,7 @@ const snake = () => {
 
     //Add foot to snakeBody
     snakeBody.push([foodY, foodX]);
+
     updateScoreHighScore();
   }
 
@@ -124,9 +145,15 @@ const gameInit = () => {
   gameBoard.innerHTML = gameBoardHTML;
 };
 
+
 const start = () => {
   updateFoodPos();
+  document.addEventListener("keyup", snakeDirection({key: 'ArrowDown'}));
   setIntervalID = setInterval(gameInit, 100);
 };
 
-start();
+
+btnStart.addEventListener("click", () => {
+  start();
+  btnStart.classList.add("hidden");
+})

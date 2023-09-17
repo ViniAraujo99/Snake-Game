@@ -7,8 +7,10 @@
   --bg: #3b1e61;
   --bgLight: #562d8d;
   --bgDark: #4b277a;
+  --bgUltLight: #dbc3fc;
   --red: #ff0000;
   --blue: #0fc4e4;
+  --blueDark: #0c889e;
 
   --f1: "Russo One", Arial Bold, sans-serif;
 }
@@ -23,14 +25,20 @@
   list-style-type: none;
 }
 
+.hidden {
+  display: none;
+}
+
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  background-color: var(--bgUltLight);
 }
 
 .container {
+  position: relative;
   width: 90vmin;
   height: 95vmin;
   display: flex;
@@ -85,12 +93,51 @@ body {
   background: var(--bgDark);
 }
 
+.start {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 50px;
+  background: var(--bgUltLight);
+  border: none;
+  overflow: hidden;
+  transition: 1.5s all;
+}
+
+.start:hover {
+  background: var(--bgLight);
+}
+
+.start::before {
+  content: "";
+  position: absolute;
+  background-color: var(--bg);
+  padding: 60px;
+  top: -85%;
+  left: 15%;
+  transform: rotate(-65deg);
+}
+
+.start::after {
+  content: "";
+  position: absolute;
+  background-color: var(--bg);
+  padding: 60px;
+  top: 65%;
+  left: 15%;
+  transform: rotate(65deg);
+}
+
 /*GAME ELEMENTS*/
 .food {
   background-color: var(--red);
 }
 
-.snake,
-.snakebody {
+.snake {
   background-color: var(--blue);
+}
+
+.snake:nth-child(2) {
+  background-color: var(--blueDark) !important;
 }
